@@ -1,0 +1,25 @@
+{
+  "name": "expressSeedProject",
+  "description": "Simple seed project for express",
+  "version": "0.0.1",
+  "private": false,
+  "devDependencies": {},
+  "dependencies": {
+    "express": "^4.13.4",
+    "jade": "^1.11.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DavidSuns/expressSeedProject.git"
+  },
+  "keywords": [
+    "express",
+    "demo"
+  ],
+  "author": "David Sun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DavidSuns/expressSeedProject/issues"
+  },
+  "homepage": "https://github.com/DavidSuns/expressSeedProject#readme"
+}
