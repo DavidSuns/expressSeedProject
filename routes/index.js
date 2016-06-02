@@ -1,14 +1,43 @@
 module.exports = function(router, app) {
 
   router.route('/').get(function (req, res) {
-    res.render('index', {title: 'demo', message: 'Home'});
+    // res.render('index', {title: 'demo', message: 'Home'});
+    // var page = req.query.p ? parseInt(req.query.p) : 1;
+    // Post.getTen(null, page, function (err, posts, total) {
+    //   if (err) {
+    //     posts = [];
+    //   }
+    //   res.render('index', {
+    //     title: '主页',
+    //     posts: posts,
+    //     page: page,
+    //     isFirstPage: (page - 1) == 0,
+    //     isLastPage: ((page - 1) * 10 + posts.length) == total,
+    //     user: req.session.user,
+    //     success: req.flash('success').toString(),
+    //     error: req.flash('error').toString()
+    //   });
+    // });
   });
-  router.route('/customer').get(function(req, res){
-    res.send('customer page');
+
+  router.route('/register').get(function(req, res) {
+
+  })
+  .post(function(req, res) {
+
   });
-  router.route('/admin').get(function(req, res){
-    res.send('admin page');
+
+  router.route('/login').get(function(req, res) {
+
+  })
+  .post(function(req, res) {
+
   });
+
+  router.route('/logout').get(function(req, res) {
+
+  });
+  
   router.route('*').get(function(request, res) {
     res.end("404!");
   });
