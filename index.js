@@ -4,6 +4,7 @@ var app = express();
 var logger = require('express-logger');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+var favicon = require('serve-favicon');
 var router = express.Router();
 var routes = require('./routes/index.js');
 
@@ -15,6 +16,7 @@ app.set('view engine', 'jade');
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(favicon(__dirname + '/public/images/favicon.jpeg'));
 app.use(logger({path: path.join(__dirname, 'logfile.txt')}));
 app.use(express.static(__dirname + '/public'));
 
