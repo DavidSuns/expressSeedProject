@@ -1,2 +1,4 @@
 node_modules/*
 logfile.txt
+*.log
+npm-debug.log

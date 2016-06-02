@@ -4,10 +4,16 @@
   "version": "0.0.1",
   "private": false,
   "devDependencies": {},
+  "scripts": {
+    "start": "node index"
+  },
   "dependencies": {
+    "body-parser": "^1.15.1",
+    "cookie-parser": "^1.4.3",
     "express": "^4.13.4",
     "express-logger": "0.0.3",
     "jade": "^1.11.0",
+    "mongodb": "^2.1.21",
     "path": "^0.12.7"
   },
   "repository": {
