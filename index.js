@@ -7,6 +7,7 @@ var cookieParser = require('cookie-parser');
 var favicon = require('serve-favicon');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
+var flash = require('connect-flash');
 var router = express.Router();
 var routes = require('./routes/index.js');
 var settings = require('./settings');
@@ -18,6 +19,7 @@ app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use(flash());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(favicon(__dirname + '/public/images/favicon.jpeg'));

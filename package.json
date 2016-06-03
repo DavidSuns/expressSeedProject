@@ -3,12 +3,15 @@
   "description": "Simple seed project for express",
   "version": "0.0.1",
   "private": false,
-  "devDependencies": {},
+  "devDependencies": {
+    "supervisor": "^0.10.0"
+  },
   "scripts": {
-    "start": "node index"
+    "start": "supervisor index"
   },
   "dependencies": {
     "body-parser": "^1.15.1",
+    "connect-flash": "^0.1.1",
     "connect-mongo": "^1.2.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.13.4",
