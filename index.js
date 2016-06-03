@@ -11,6 +11,7 @@ var router = express.Router();
 var routes = require('./routes/index.js');
 var settings = require('./settings');
 
+var fs = require('fs');
 var errorLog = fs.createWriteStream('error.log', {flags: 'a'});
 
 app.set('port', process.env.PORT || 3000);
@@ -27,9 +28,7 @@ app.use(session({
   key: settings.db,//cookie name
   cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//30 days
   store: new MongoStore({
-    db: settings.db,
-    host: settings.host,
-    port: settings.port
+    url: "mongodb://" + settings.host + "/" + settings.db
   })
 }));
 
