@@ -5,4 +5,8 @@ html
     link(rel="stylesheet", type="text/css" href="/css/style.css")
   body
     include ./header.jade
-    artcile 这是主页
+    artcile 
+      if success
+        div success
+      if fail
+        div fail

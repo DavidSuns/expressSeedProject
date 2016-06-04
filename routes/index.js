@@ -4,7 +4,12 @@ var User = require('../models/user.js');
 module.exports = function(router, app) {
 
   router.route('/').get(function (req, res) {
-    res.render('index', { title: '主页' });
+    res.render('index', {
+      title: '主页',
+      user: req.session.user,
+      success: req.flash('success').toString(),
+      fail: req.flash('fail').toString()
+   });
   });
 
   router.route('/register').get(function(req, res) {
@@ -36,7 +41,7 @@ module.exports = function(router, app) {
       }
       if(user) {
         req.flash('error', '用户已存在!');
-        return res.redirect('/register');
+        return res.redirect('/');
       }
 
       newUser.save(function(err, user) {
@@ -53,14 +58,40 @@ module.exports = function(router, app) {
   });
 
   router.route('/login').get(function(req, res) {
-    res.render('login', { title: '登录' });
+    res.render('login', {
+      title: '登录',
+      user: req.session.user,
+      success: req.flash('success').toString(),
+      error: req.flash('error').toString()});
+    });
   })
   .post(function(req, res) {
+    var md5 = crypto.createHash('md5'),
+    password = md5.update(req.body.password).digest('hex');
+    User.get(req.body.name, function(err, user) {
+      if(err) {
+        req.flash("error", err);
+        return req.redirect('/login');
+      }
+      if(!user) {
+        req.flash("error", "用户不存在");
+        return req.redirect('/login');
+      }
+      if(user.password != password) {
+        req.flash("error", "密码错误");
+        return req.redirect('/login');
+      }
 
+      req.session.user = user;
+      req.flash('success', '登陆成功!');
+      res.redirect('/');
+    });
   });
 
   router.route('/logout').get(function(req, res) {
-
+    req.session.user = null;
+    req.flash('success', '登出成功!');
+    res.redirect('/');//登出成功后跳转到主页
   });
 
   router.route('/post').get(function(req, res) {

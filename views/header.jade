@@ -3,7 +3,14 @@ header
 nav
   span
     a(title="主页" href="/") home
-  span
-    a(title="登录" href="/login") login
-  span 
-    a(title="注册" href="/register") register
+  if user
+    span
+      a(title="发表" href="/post") post
+    span 
+      a(title="登出" href="/logout") logout
+  else
+    span
+      a(title="登录" href="/login") login
+    span 
+      a(title="注册" href="/register") register
+    
