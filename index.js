@@ -9,6 +9,7 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var flash = require('connect-flash');
 var router = express.Router();
+
 var routes = require('./routes/index.js');
 var settings = require('./settings');
 
