@@ -5,8 +5,14 @@ html
     link(rel="stylesheet", type="text/css" href="/css/style.css")
   body
     include ./header.jade
-    artcile 
-      if success
-        div success
-      if fail
-        div fail
+    each post in posts
+      p
+        h2
+          a(href="#") post.title
+      p(class="info")
+        | 作者：
+        a(href="#") post.title
+        | 日期：
+        post.time.minute
+      p.
+        post.post
