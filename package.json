@@ -19,6 +19,7 @@
     "express-logger": "0.0.3",
     "express-session": "^1.13.0",
     "jade": "^1.11.0",
+    "markdown": "^0.5.0",
     "mongodb": "^2.1.21",
     "path": "^0.12.7",
     "serve-favicon": "^2.3.0"
