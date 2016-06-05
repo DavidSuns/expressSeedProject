@@ -1,6 +1,19 @@
 var crypto = require('crypto');
+var multer  = require('multer');
 var User = require('../models/user.js');
 var Post = require('../models/post.js');
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb){
+        cb(null, './public/images')
+    },
+    filename: function (req, file, cb){
+        cb(null, file.originalname)
+    }
+});
+var upload = multer({
+    storage: storage
+});
 
 module.exports = function(router, app) {
 
@@ -118,6 +131,21 @@ module.exports = function(router, app) {
       req.flash('success', '发布成功!');
       res.redirect('/');
     });
+  });
+
+  router.route('/upload').get(checkLogin)
+  .get(function (req, res) {
+    res.render('upload', {
+      title: '文件上传',
+      user: req.session.user,
+      success: req.flash('success').toString(),
+      error: req.flash('error').toString()
+    });
+  })
+  .post(checkLogin)
+  .post(upload.array('field1', 5), function (req, res) {
+    req.flash('success', '文件上传成功!');
+    res.redirect('/upload');
   });
 
   router.route('*').get(function(request, res) {
