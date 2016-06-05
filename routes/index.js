@@ -117,7 +117,7 @@ module.exports = function(router, app) {
   });
 
   router.route('/post').get(checkLogin)
-  .get(function(req, res) {
+  .getAll(function(req, res) {
     res.render('post', { title: '发表' });
   })
   .post(function(req, res) {
@@ -146,6 +146,44 @@ module.exports = function(router, app) {
   .post(upload.array('field1', 5), function (req, res) {
     req.flash('success', '文件上传成功!');
     res.redirect('/upload');
+  });
+
+  router.route('/u/:name').get(function (req, res) {
+    User.get(req.params.name, function (err, user) {
+      if (!user) {
+        req.flash('error', '用户不存在!');
+        return res.redirect('/');
+      }
+      Post.getAll(user.name, function (err, posts) {
+        if (err) {
+          req.flash('error', err);
+          return res.redirect('/');
+        }
+        res.render('user', {
+          title: user.name,
+          posts: posts,
+          user : req.session.user,
+          success : req.flash('success').toString(),
+          error : req.flash('error').toString()
+        });
+      });
+    });
+  });
+
+  router.route('/u/:name/:day/:title').get(function (req, res) {
+    Post.getOne(req.params.name, req.params.day, req.params.title, function (err, post) {
+      if (err) {
+        req.flash('error', err);
+        return res.redirect('/');
+      }
+      res.render('article', {
+        title: req.params.title,
+        post: post,
+        user: req.session.user,
+        success: req.flash('success').toString(),
+        error: req.flash('error').toString()
+      });
+    });
   });
 
   router.route('*').get(function(request, res) {
