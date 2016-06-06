@@ -18,7 +18,8 @@ var upload = multer({
 module.exports = function(router, app) {
 
   router.route('/').get(function (req, res) {
-    Post.get(null, function (err, posts) {
+    var page = parseInt(req.query.p) || 1;
+    Post.getTen(null, page, function (err, posts, total) {
     if (err) {
       posts = [];
     }
@@ -26,6 +27,9 @@ module.exports = function(router, app) {
       title: '主页',
       user: req.session.user,
       posts: posts,
+      page: page,
+      isFirstPage: (page - 1) == 0,
+      isLastPage: ((page - 1) * 10 + posts.length) == total,
       success: req.flash('success').toString(),
       error: req.flash('error').toString()
     });
