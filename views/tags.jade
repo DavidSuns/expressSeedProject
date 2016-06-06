@@ -1,0 +1,9 @@
+html
+  head
+    title!= title
+    meta(charset="utf-8")
+    link(rel="stylesheet", type="text/css" href="/css/style.css")
+  body
+    include ./header.jade
+    each post in posts
+      a(class="tag" href="/tags/#{tag}") != tag

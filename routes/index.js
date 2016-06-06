@@ -126,7 +126,8 @@ module.exports = function(router, app) {
   })
   .post(function(req, res) {
     var currentUser = req.session.user;
-    var post = new Post(currentUser.name, req.body.title, req.body.post);
+    tags = [req.body.tag1, req.body.tag2, req.body.tag3];
+    var post = new Post(currentUser.name, req.body.title, tags, req.body.post);
     post.save(function (err) {
       if (err) {
         req.flash('error', err);
@@ -260,20 +261,52 @@ module.exports = function(router, app) {
   });
 
   router.route('/archive').get(function (req, res) {
-  Post.getArchive(function (err, posts) {
-    if (err) {
-      req.flash('error', err);
-      return res.redirect('/');
-    }
-    res.render('archive', {
-      title: '存档',
-      posts: posts,
-      user: req.session.user,
-      success: req.flash('success').toString(),
-      error: req.flash('error').toString()
+    Post.getArchive(function (err, posts) {
+      if (err) {
+        req.flash('error', err);
+        return res.redirect('/');
+      }
+      res.render('archive', {
+        title: '存档',
+        posts: posts,
+        user: req.session.user,
+        success: req.flash('success').toString(),
+        error: req.flash('error').toString()
+      });
     });
   });
-});
+
+  router.route('/tags').get(function (req, res) {
+    Post.getTags(function (err, posts) {
+      if (err) {
+        req.flash('error', err);
+        return res.redirect('/');
+      }
+      res.render('tags', {
+        title: '标签',
+        posts: posts,
+        user: req.session.user,
+        success: req.flash('success').toString(),
+        error: req.flash('error').toString()
+      });
+    });
+  });
+
+  router.route('/tags/:tag').get(function (req, res) {
+    Post.getTag(req.params.tag, function (err, posts) {
+      if (err) {
+        req.flash('error',err);
+        return res.redirect('/');
+      }
+      res.render('tag', {
+        title: 'TAG:' + req.params.tag,
+        posts: posts,
+        user: req.session.user,
+        success: req.flash('success').toString(),
+        error: req.flash('error').toString()
+      });
+    });
+  });
 
   router.route('*').get(function(request, res) {
     res.end("404!");
