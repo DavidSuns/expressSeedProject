@@ -14,6 +14,7 @@ var routes = require('./routes/index.js');
 var settings = require('./settings');
 
 var fs = require('fs');
+var accessLog = fs.createWriteStream('access.log', {flags: 'a'});
 var errorLog = fs.createWriteStream('error.log', {flags: 'a'});
 
 app.set('port', process.env.PORT || 3000);
@@ -26,7 +27,8 @@ app.use(flash());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(favicon(__dirname + '/public/images/favicon.jpeg'));
-app.use(logger({path: path.join(__dirname, 'logfile.txt')}));
+app.use(logger('dev'));
+app.use(logger({stream: accessLog}));
 app.use(express.static(__dirname + '/public'));
 app.use(session({
   secret: settings.cookieSecret,
