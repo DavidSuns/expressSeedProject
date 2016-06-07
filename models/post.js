@@ -26,6 +26,7 @@ Post.prototype.save = function (callback) {
       title: this.title,
       tags: this.tags,
       post: this.post,
+      pv: 0,
       comments: []
   };
 
@@ -101,11 +102,23 @@ Post.getOne = function(name, day, title, callback) {
        "time.day": day,
        "title": title
      }, function (err, doc) {
-       mongodb.close();
        if (err) {
+         mongodb.close();
          return callback(err);
        }
        if (doc) {
+         collection.update({
+          "name": name,
+          "time.day": day,
+          "title": title
+          }, {
+            $inc: {"pv": 1}
+          }, function (err) {
+            mongodb.close();
+            if (err) {
+              return callback(err);
+            }
+          });
           doc.post = markdown.toHTML(doc.post);
           doc.comments.forEach(function (comment) {
             comment.content = markdown.toHTML(comment.content);

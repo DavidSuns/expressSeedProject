@@ -19,5 +19,10 @@ html
       != post.time.minute
     p.
     != post.post
+    p.info
+      | 阅读： 
+      !=post.pv
+      | 评论： 
+      !=post.comments.length
     
     include ./comments.jade
