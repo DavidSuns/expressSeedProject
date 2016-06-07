@@ -309,7 +309,7 @@ module.exports = function(router, app) {
   });
 
   router.route('*').get(function(request, res) {
-    res.end("404!");
+    res.render("404");
   });
 
   app.use('/',router);
