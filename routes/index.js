@@ -308,6 +308,22 @@ module.exports = function(router, app) {
     });
   });
 
+  router.route('/search').get(function (req, res) {
+    Post.search(req.query.keyword, function (err, posts) {
+      if (err) {
+        req.flash('error', err);
+        return res.redirect('/');
+      }
+      res.render('search', {
+        title: "SEARCH:" + req.query.keyword,
+        posts: posts,
+        user: req.session.user,
+        success: req.flash('success').toString(),
+        error: req.flash('error').toString()
+      });
+    });
+  });
+
   router.route('*').get(function(request, res) {
     res.render("404");
   });
