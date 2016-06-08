@@ -10,6 +10,8 @@ html
         h2
           a(href="/u/#{post.name}/#{post.time.day}/#{post.title}") 
           != post.title
+          a(href="/u/#{post.name}")
+            img(class="r_head" src="#{post.head}")
       p.info
         | 作者：
         a(href="u/#{post.name}") 

@@ -1,11 +1,13 @@
 br
-each post in posts
-  p
-    a(href="#{comment.website}") 
-    != comment.name
-    span.info "回复于 #{comment.time} "
-  p.
-  != comment.content
+each comment in post.comments
+  div(style="padding-left:4em")
+    p
+      img(class="l_head" src="#{comment.head}")
+      a(href="#{comment.website}") 
+      != comment.name
+      span.info "回复于 #{comment.time} "
+    p.
+    != comment.content
   
 form(method="post" action="/u/#{post.name}/#{post.time.day}/#{post.title}")
   if user

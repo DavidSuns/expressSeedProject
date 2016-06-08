@@ -4,6 +4,7 @@ var Comment = require('../models/comment.js');
 
 function Post(name, title, tags, post) {
   this.name = name;
+  this.head = head;
   this.title = title;
   this.post = post;
   this.tags = tags;
@@ -22,6 +23,7 @@ Post.prototype.save = function (callback) {
 
   var post = {
       name: this.name,
+      head: this.head,
       time: time,
       title: this.title,
       tags: this.tags,
