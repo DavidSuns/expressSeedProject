@@ -2,7 +2,7 @@ var mongodb = require('./db.js');
 var markdown = require('markdown').markdown;
 var Comment = require('../models/comment.js');
 
-function Post(name, title, tags, post) {
+function Post(name, title, head, tags, post) {
   this.name = name;
   this.head = head;
   this.title = title;

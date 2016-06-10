@@ -91,6 +91,7 @@ module.exports = function(router, app) {
       error: req.flash('error').toString()});
   })
   .post(function(req, res) {
+    console.log("we are in");
     var md5 = crypto.createHash('md5'),
     password = md5.update(req.body.password).digest('hex');
     User.get(req.body.name, function(err, user) {
@@ -121,7 +122,7 @@ module.exports = function(router, app) {
   });
 
   router.route('/post').get(checkLogin)
-  .getAll(function(req, res) {
+  .get(function(req, res) {
     res.render('post', { title: '发表' });
   })
   .post(function(req, res) {
@@ -159,7 +160,7 @@ module.exports = function(router, app) {
         req.flash('error', '用户不存在!');
         return res.redirect('/');
       }
-      Post.getAll(user.name, function (err, posts) {
+      Post.getTen(user.name, 1, function (err, posts) {
         if (err) {
           req.flash('error', err);
           return res.redirect('/');
@@ -210,7 +211,7 @@ module.exports = function(router, app) {
     });
   })
   .post(checkLogin)
-  .post('/edit/:name/:day/:title', function (req, res) {
+  .post(function (req, res) {
     var currentUser = req.session.user;
     Post.update(currentUser.name, req.params.day, req.params.title, req.body.post, function (err) {
       var url = encodeURI('/u/' + req.params.name + '/' + req.params.day + '/' + req.params.title);
