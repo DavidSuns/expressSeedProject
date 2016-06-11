@@ -1,5 +1,5 @@
-var mongodb = require('./db');
 var ObjectID = require('mongodb').ObjectID;
+var pool = require('./pool.js');
 
 function Comment(_id, comment) {
   this.name = name;
@@ -10,13 +10,13 @@ Comment.prototype.save = function(callback){
   var name = this.name,
       _id = this._id;
 
-  mongodb.open(function (err, db) {
+  pool.acquire(function (err, db) {
     if (err) {
       return callback(err);
     }
     db.collection('posts', function (err, collection) {
       if (err) {
-        mongodb.close();
+        pool.release(db);
         return callback(err);
       }
       collection.update({
@@ -24,7 +24,7 @@ Comment.prototype.save = function(callback){
       }, {
         $push: {"comments": comment}
       } , function (err) {
-          mongodb.close();
+          pool.release(db);
           if (err) {
             return callback(err);
           }
