@@ -97,15 +97,15 @@ module.exports = function(router, app) {
     User.get(req.body.name, function(err, user) {
       if(err) {
         req.flash("error", err);
-        return req.redirect('/login');
+        return res.redirect('/login');
       }
       if(!user) {
         req.flash("error", "用户不存在");
-        return req.redirect('/login');
+        return res.redirect('/login');
       }
       if(user.password != password) {
         req.flash("error", "密码错误");
-        return req.redirect('/login');
+        return res.redirect('/login');
       }
 
       req.session.user = user;
