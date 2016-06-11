@@ -1,6 +1,7 @@
 var mongodb = require('./db.js');
 var markdown = require('markdown').markdown;
 var Comment = require('../models/comment.js');
+var ObjectID = require('mongodb').ObjectID;
 
 function Post(name, title, head, tags, post) {
   this.name = name;
@@ -90,7 +91,7 @@ Post.getTen = function(name, page, callback) {
   });
 };
 
-Post.getOne = function(name, day, title, callback) {
+Post.getOne = function(_id, callback) {
   mongodb.open(function(err, db) {
     if(err) {
       return callback(err);
@@ -101,9 +102,7 @@ Post.getOne = function(name, day, title, callback) {
         return callback(err);
       }
       collection.findOne({
-       "name": name,
-       "time.day": day,
-       "title": title
+      "_id": new ObjectID(_id)
      }, function (err, doc) {
        if (err) {
          mongodb.close();
@@ -133,7 +132,7 @@ Post.getOne = function(name, day, title, callback) {
  });
 };
 
-Post.edit = function(name, day, title, callback) {
+Post.edit = function(_id, callback) {
   mongodb.open(function (err, db) {
     if (err) {
       return callback(err);
@@ -144,9 +143,7 @@ Post.edit = function(name, day, title, callback) {
         return callback(err);
       }
       collection.findOne({
-        "name": name,
-        "time.day": day,
-        "title": title
+        new ObjectID(_id)
       }, function (err, doc) {
         mongodb.close();
         if (err) {
@@ -158,7 +155,7 @@ Post.edit = function(name, day, title, callback) {
   });
 };
 
-Post.update = function(name, day, title, post, callback) {
+Post.update = function(_id, post, callback) {
   mongodb.open(function (err, db) {
     if (err) {
       return callback(err);
@@ -169,9 +166,7 @@ Post.update = function(name, day, title, post, callback) {
         return callback(err);
       }
       collection.update({
-        "name": name,
-        "time.day": day,
-        "title": title
+        new ObjectID(_id)
       }, {
         $set: {post: post}
       }, function (err) {
@@ -185,7 +180,7 @@ Post.update = function(name, day, title, post, callback) {
   });
 };
 
-Post.remove = function(name, day, title, callback) {
+Post.remove = function(_id, callback) {
   mongodb.open(function (err, db) {
     if (err) {
       return callback(err);
@@ -196,9 +191,7 @@ Post.remove = function(name, day, title, callback) {
         return callback(err);
       }
       collection.remove({
-        "name": name,
-        "time.day": day,
-        "title": title
+        new ObjectID(_id)
       }, {
         w: 1
       }, function (err) {

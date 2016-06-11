@@ -8,7 +8,7 @@ html
     each post in posts
       p
         h2
-          a(href="/u/#{post.name}/#{post.time.day}/#{post.title}") 
+          a(href="/p/#{post._id}") 
           != post.title
           a(href="/u/#{post.name}")
             img(class="r_head" src="#{post.head}")

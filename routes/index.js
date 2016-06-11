@@ -177,27 +177,52 @@ module.exports = function(router, app) {
     });
   });
 
-  router.route('/u/:name/:day/:title').get(function (req, res) {
-    Post.getOne(req.params.name, req.params.day, req.params.title, function (err, post) {
+  router.route('/p/:_id').get(function (req, res) {
+    Post.getOne(req.params._id, function (err, post) {
       if (err) {
         req.flash('error', err);
         return res.redirect('/');
       }
       res.render('article', {
-        title: req.params.title,
+        title: post.title,
         post: post,
         user: req.session.user,
         success: req.flash('success').toString(),
         error: req.flash('error').toString()
       });
     });
-  });
+  })
+  .post(function (req, res) {
+    var date = new Date(),
+        time = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +
+               date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
+   var md5 = crypto.createHash('md5'),
+    email_MD5 = md5.update(req.body.email.toLowerCase()).digest('hex'),
+    head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
+    var comment = {
+        name: req.body.name,
+        head: head,
+        email: req.body.email,
+        website: req.body.website,
+        time: time,
+        content: req.body.content
+    };
+    var newComment = new Comment(req.params._id, comment);
+    newComment.save(function (err) {
+      if (err) {
+        req.flash('error', err);
+        return res.redirect('back');
+      }
+      req.flash('success', '留言成功!');
+      res.redirect('back');
+    });
+  });;
 
-  router.route('/edit/:name/:day/:title')
+  router.route('/edit/:_id')
   .get(checkLogin)
   .get(function (req, res) {
     var currentUser = req.session.user;
-    Post.edit(currentUser.name, req.params.day, req.params.title, function (err, post) {
+    Post.edit(req.params._id, function (err, post) {
       if (err) {
         req.flash('error', err);
         return res.redirect('back');
@@ -214,8 +239,8 @@ module.exports = function(router, app) {
   .post(checkLogin)
   .post(function (req, res) {
     var currentUser = req.session.user;
-    Post.update(currentUser.name, req.params.day, req.params.title, req.body.post, function (err) {
-      var url = encodeURI('/u/' + req.params.name + '/' + req.params.day + '/' + req.params.title);
+    Post.update(req.params._id, req.body.post, function (err) {
+      var url = encodeURI('/p/' + req.params._id);
       if (err) {
         req.flash('error', err);
         return res.redirect(url);
@@ -225,44 +250,17 @@ module.exports = function(router, app) {
     });
   });
 
-  router.route('/remove/:name/:day/:title')
+  router.route('/remove/:_id')
   .get(checkLogin)
   .get(function (req, res) {
     var currentUser = req.session.user;
-    Post.remove(currentUser.name, req.params.day, req.params.title, function (err) {
+    Post.remove(req.params._id, function (err) {
       if (err) {
         req.flash('error', err);
         return res.redirect('back');
       }
       req.flash('success', '删除成功!');
       res.redirect('/');
-    });
-  });
-
-  router.route('/u/:name/:day/:title')
-  .post(function (req, res) {
-    var date = new Date(),
-        time = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +
-               date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
-   var md5 = crypto.createHash('md5'),
-    email_MD5 = md5.update(req.body.email.toLowerCase()).digest('hex'),
-    head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
-    var comment = {
-        name: req.body.name,
-        head: head,
-        email: req.body.email,
-        website: req.body.website,
-        time: time,
-        content: req.body.content
-    };
-    var newComment = new Comment(req.params.name, req.params.day, req.params.title, comment);
-    newComment.save(function (err) {
-      if (err) {
-        req.flash('error', err);
-        return res.redirect('back');
-      }
-      req.flash('success', '留言成功!');
-      res.redirect('back');
     });
   });
 
@@ -332,10 +330,10 @@ module.exports = function(router, app) {
 
 
 
-  router.route('/reprint/:name/:day/:title')
+  router.route('/reprint/:_id')
   .get(checkLogin)
   .get(function (req, res) {
-    Post.edit(req.params.name, req.params.day, req.params.title, function (err, post) {
+    Post.edit(req.params._id, function (err, post) {
       if (err) {
         req.flash('error', err);
         return res.redirect(back);
@@ -349,7 +347,7 @@ module.exports = function(router, app) {
           return res.redirect('back');
         }
         req.flash('success', '转载成功!');
-        var url = encodeURI('/u/' + post.name + '/' + post.time.day + '/' + post.title);
+        var url = encodeURI('/p/' + post._id);
         res.redirect(url);
       });
     });

@@ -1,17 +1,14 @@
 var mongodb = require('./db');
+var ObjectID = require('mongodb').ObjectID;
 
-function Comment(name, day, title, comment) {
+function Comment(_id, comment) {
   this.name = name;
-  this.day = day;
-  this.title = title;
-  this.comment = comment;
+  this._id = _id;
 }
 
 Comment.prototype.save = function(callback){
   var name = this.name,
-    day = this.day,
-    title = this.title,
-    comment = this.comment;
+      _id = this._id;
 
   mongodb.open(function (err, db) {
     if (err) {
@@ -23,9 +20,7 @@ Comment.prototype.save = function(callback){
         return callback(err);
       }
       collection.update({
-        "name": name,
-        "time.day": day,
-        "title": title
+        new ObjectID(_id)
       }, {
         $push: {"comments": comment}
       } , function (err) {
