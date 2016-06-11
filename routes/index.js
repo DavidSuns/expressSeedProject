@@ -2,6 +2,7 @@ var crypto = require('crypto');
 var multer  = require('multer');
 var User = require('../models/user.js');
 var Post = require('../models/post.js');
+var Comment = require('../models/comment.js')
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb){
@@ -128,7 +129,7 @@ module.exports = function(router, app) {
   .post(function(req, res) {
     var currentUser = req.session.user;
     tags = [req.body.tag1, req.body.tag2, req.body.tag3];
-    var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.post);
+    var post = new Post(currentUser.name, req.body.title, currentUser.head, tags, req.body.post);
     post.save(function (err) {
       if (err) {
         req.flash('error', err);
