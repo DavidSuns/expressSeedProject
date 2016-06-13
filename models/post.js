@@ -1,7 +1,8 @@
-var mongodb = require('./db.js');
+// var mongodb = require('./db.js');
+var ObjectID = require('mongodb').ObjectID;
 var markdown = require('markdown').markdown;
 var Comment = require('../models/comment.js');
-var ObjectID = require('mongodb').ObjectID;
+
 var pool = require('./pool.js');
 
 function Post(name, title, head, tags, post) {
