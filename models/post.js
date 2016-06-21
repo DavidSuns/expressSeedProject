@@ -1,9 +1,8 @@
 // var mongodb = require('./db.js');
+var pool = require('./pool.js');
 var ObjectID = require('mongodb').ObjectID;
 var markdown = require('markdown').markdown;
 var Comment = require('../models/comment.js');
-
-var pool = require('./pool.js');
 
 function Post(name, title, head, tags, post) {
   this.name = name;
@@ -145,7 +144,7 @@ Post.edit = function(_id, callback) {
         return callback(err);
       }
       collection.findOne({
-        new ObjectID(_id)
+        "_id": new ObjectID(_id)
       }, function (err, doc) {
         pool.release(db);
         if (err) {
@@ -168,7 +167,7 @@ Post.update = function(_id, post, callback) {
         return callback(err);
       }
       collection.update({
-        new ObjectID(_id)
+        "_id": new ObjectID(_id)
       }, {
         $set: {post: post}
       }, function (err) {
@@ -193,7 +192,7 @@ Post.remove = function(_id, callback) {
         return callback(err);
       }
       collection.remove({
-        new ObjectID(_id)
+        "_id": new ObjectID(_id)
       }, {
         w: 1
       }, function (err) {
@@ -397,7 +396,7 @@ Post.remove = function(_id, callback) {
         return callback(err);
       }
       collection.findOne({
-        new ObjectID(_id)
+        "_id": new ObjectID(_id)
       }, function (err, doc) {
         if (err) {
           pool.release(db);
@@ -428,7 +427,7 @@ Post.remove = function(_id, callback) {
         }
 
         collection.remove({
-          new ObjectID(_id)
+          "_id": new ObjectID(_id)
         }, {
           w: 1
         }, function (err) {

@@ -1,4 +1,4 @@
-var mongodb = require('./db.js');
+var Db = require('./db.js');
 var poolModule = require('generic-pool');
 var pool = poolModule.Pool({
   name     : 'mongoPool',

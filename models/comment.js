@@ -20,7 +20,7 @@ Comment.prototype.save = function(callback){
         return callback(err);
       }
       collection.update({
-        new ObjectID(_id)
+        "_id": new ObjectID(_id)
       }, {
         $push: {"comments": comment}
       } , function (err) {
